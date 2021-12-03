@@ -1,0 +1,28 @@
+version: "3.7"
+
+networks:
+  myNetwork:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    networks:
+      - myNetwork
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: "bitnami/kafka:latest"
+    networks:
+      - myNetwork
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
