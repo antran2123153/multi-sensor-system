@@ -4,19 +4,6 @@
 #include <ctype.h>
 #include <librdkafka/rdkafka.h>
 
-// Configure infomations
-#define pressure_topic "pressure"
-#define temperature_topic "temperature"
-#define bootstrap_server "localhost:9093"
-#define sasl_mechanism "SCRAM-SHA-256"
-#define sasl_username "user_test1"
-#define sasl_password "12345678"
-#define ssl_keystore_location "D:\\kafka\\kafka.keystore.jks"
-#define ssl_keystore_password "FzOGrwIE"
-#define ssl_key_location "D:\\kafka\\kafka.truststore.jks"
-#define ssl_key_password "FzOGrwIE"
-#define group_id "id1"
-
 static volatile sig_atomic_t run = 1;
 rd_kafka_conf_t *config;
 char errstr[512];
@@ -40,15 +27,15 @@ static int is_printable(const char *buf, size_t size)
 void setConfig()
 {
     config = rd_kafka_conf_new();
-    rd_kafka_conf_set(config, "bootstrap.servers", bootstrap_server, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.mechanism", sasl_mechanism, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.username", sasl_username, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.password", sasl_password, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.keystore.location", ssl_keystore_location, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.keystore.password", ssl_keystore_password, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.key.location", ssl_key_location, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.key.password", ssl_key_password, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "group.id", group_id, errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "bootstrap.servers", getenv("BOOTSTRAP_SERVER"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.mechanism", getenv("SASL_MECHANISM"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.username", getenv("SASL_USERNAME"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.password", getenv("SASL_PASSWORD"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.keystore.location", getenv("SSL_KEYSTORE_LOCATION"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.keystore.password", getenv("SSL_KEYSTORE_PASSWORD"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.key.location", getenv("SSL_KEY_LOCATION"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.key.password", getenv("SSL_KEY_PASSWORD"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "group.id", getenv("GROUP_ID"), errstr, sizeof(errstr));
     rd_kafka_conf_set(config, "auto.offset.reset", "earliest", errstr, sizeof(errstr));
 }
 
@@ -74,8 +61,8 @@ int main(int argc, char **argv)
     rd_kafka_poll_set_consumer(consumer);
 
     subscription = rd_kafka_topic_partition_list_new(2);
-    rd_kafka_topic_partition_list_add(subscription, pressure_topic, RD_KAFKA_PARTITION_UA);
-    rd_kafka_topic_partition_list_add(subscription, temperature_topic, RD_KAFKA_PARTITION_UA);
+    rd_kafka_topic_partition_list_add(subscription, getenv("PRESSURE_TOPIC"), RD_KAFKA_PARTITION_UA);
+    rd_kafka_topic_partition_list_add(subscription, getenv("TEMPERATURE_TOPIC"), RD_KAFKA_PARTITION_UA);
 
     err = rd_kafka_subscribe(consumer, subscription);
     if (err)

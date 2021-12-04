@@ -31,7 +31,9 @@ services:
       - zookeeper
 
   producer-kafka:
-    build: ./producer
+    build:
+      context: .
+      dockerfile: Dockerfile-producer
     networks:
       - myNetwork
     environment:
@@ -52,7 +54,9 @@ services:
       - kafka
 
   consumer-kafka:
-    build: ./consumer
+    build:
+      context: .
+      dockerfile: Dockerfile-consumer
     networks:
       - myNetwork
     environment:

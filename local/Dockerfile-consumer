@@ -6,9 +6,8 @@ RUN apt-get update && \
 
 WORKDIR /src/
 
-COPY ./producer.c /src/
-COPY ./random.h /src/
+COPY ./consumer/consumer.c /src/
 
-RUN gcc -o producer producer.c -lrdkafka -fopenmp -lm
+RUN gcc consumer.c -o consumer -lrdkafka -lm
 
-CMD ["./producer"]
+CMD ["./consumer"]
