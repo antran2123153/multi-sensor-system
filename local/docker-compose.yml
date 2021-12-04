@@ -1,0 +1,73 @@
+version: "3.7"
+
+networks:
+  myNetwork:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    networks:
+      - myNetwork
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: "bitnami/kafka:latest"
+    networks:
+      - myNetwork
+    ports:
+      - "9093:9093"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      - zookeeper
+
+  producer-kafka:
+    build: ./producer
+    networks:
+      - myNetwork
+    environment:
+      - OMP_NUM_THREADS=4
+      - PRESSURE_TOPIC=pressure
+      - TEMPERATURE_TOPIC=temperature
+      - BOOTSTRAP_SERVER=kafka:9092
+      - SASL_MECHANISM=SCRAM-SHA-256
+      - SASL_USERNAME=user_test1
+      - SASL_PASSWORD=12345678
+      - SSL_KEYSTORE_LOCATION=D:\\kafka\\kafka.keystore.jks
+      - SSL_KEYSTORE_PASSWORD=FzOGrwIE
+      - SSL_KEY_LOCATION=D:\\kafka\\kafka.truststore.jks
+      - SSL_KEY_PASSWORD=FzOGrwIE
+      - GROUP_ID=id1
+    depends_on:
+      - zookeeper
+      - kafka
+
+  consumer-kafka:
+    build: ./consumer
+    networks:
+      - myNetwork
+    environment:
+      - OMP_NUM_THREADS=4
+      - PRESSURE_TOPIC=pressure
+      - TEMPERATURE_TOPIC=temperature
+      - BOOTSTRAP_SERVER=kafka:9092
+      - SASL_MECHANISM=SCRAM-SHA-256
+      - SASL_USERNAME=user_test1
+      - SASL_PASSWORD=12345678
+      - SSL_KEYSTORE_LOCATION=D:\\kafka\\kafka.keystore.jks
+      - SSL_KEYSTORE_PASSWORD=FzOGrwIE
+      - SSL_KEY_LOCATION=D:\\kafka\\kafka.truststore.jks
+      - SSL_KEY_PASSWORD=FzOGrwIE
+      - GROUP_ID=id1
+    depends_on:
+      - zookeeper
+      - kafka

@@ -1,23 +1,8 @@
+#include "./random.h"
 #include <stdio.h>
 #include <omp.h>
-#include <librdkafka/rdkafka.h>
-#include "../../sensors/random.h"
 #include <string.h>
-// #include <time.h>
-
-#define OMP_NUM_THREADS 4
-
-// Configure infomations
-const char *pressure_topic = "pressure";
-const char *temperature_topic = "temperature";
-const char *bootstrap_server = "localhost:9092";
-const char *sasl_mechanism = "SCRAM-SHA-256";
-const char *sasl_username = "user_test1";
-const char *sasl_password = "12345678";
-const char *ssl_keystore_location = "D:\\kafka\\kafka.keystore.jks";
-const char *ssl_keystore_password = "FzOGrwIE";
-const char *ssl_key_location = "D:\\kafka\\kafka.truststore.jks";
-const char *ssl_key_password = "FzOGrwIE";
+#include <librdkafka/rdkafka.h>
 
 rd_kafka_conf_t *config;
 char errstr[512];
@@ -25,14 +10,14 @@ char errstr[512];
 void setConfig()
 {
     config = rd_kafka_conf_new();
-    rd_kafka_conf_set(config, "bootstrap.servers", bootstrap_server, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.mechanism", sasl_mechanism, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.username", sasl_username, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "sasl.password", sasl_password, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.keystore.location", ssl_keystore_location, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.keystore.password", ssl_keystore_password, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.key.location", ssl_key_location, errstr, sizeof(errstr));
-    rd_kafka_conf_set(config, "ssl.key.password", ssl_key_password, errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "bootstrap.servers", getenv("BOOTSTRAP_SERVER"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.mechanism", getenv("SASL_MECHANISM"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.username", getenv("SASL_USERNAME"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "sasl.password", getenv("SASL_PASSWORD"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.keystore.location", getenv("SSL_KEYSTORE_LOCATION"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.keystore.password", getenv("SSL_KEYSTORE_PASSWORD"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.key.location", getenv("SSL_KEY_LOCATION"), errstr, sizeof(errstr));
+    rd_kafka_conf_set(config, "ssl.key.password", getenv("SSL_KEY_PASSWORD"), errstr, sizeof(errstr));
 }
 
 int main(int argc, char **argv)
@@ -54,7 +39,7 @@ int main(int argc, char **argv)
 
 #pragma omp parallel
     {
-        omp_set_num_threads(OMP_NUM_THREADS);
+        omp_set_num_threads(getenv("OMP_NUM_THREADS"));
         while (1)
         {
             // send temperature
@@ -65,7 +50,7 @@ int main(int argc, char **argv)
         reSendTemperature:
             err = rd_kafka_producev(
                 producer,
-                RD_KAFKA_V_TOPIC(temperature_topic),
+                RD_KAFKA_V_TOPIC(getenv("TEMPERATURE_TOPIC")),
                 RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY),
                 RD_KAFKA_V_VALUE(buf1, len),
                 RD_KAFKA_V_OPAQUE(NULL),
@@ -85,7 +70,7 @@ int main(int argc, char **argv)
         reSendPressure:
             err = rd_kafka_producev(
                 producer,
-                RD_KAFKA_V_TOPIC(pressure_topic),
+                RD_KAFKA_V_TOPIC(getenv("PRESSURE_TOPIC")),
                 RD_KAFKA_V_MSGFLAGS(RD_KAFKA_MSG_F_COPY),
                 RD_KAFKA_V_VALUE(buf2, len),
                 RD_KAFKA_V_OPAQUE(NULL),
