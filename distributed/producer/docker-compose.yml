@@ -1,5 +1,9 @@
 version: "3.7"
 
+networks:
+  myNetwork:
+    driver: bridge
+
 services:
   producer-kafka:
     build: .
@@ -15,4 +19,5 @@ services:
       - SSL_KEYSTORE_PASSWORD=FzOGrwIE
       - SSL_KEY_LOCATION=D:\\kafka\\kafka.truststore.jks
       - SSL_KEY_PASSWORD=FzOGrwIE
-      - GROUP_ID=id1
+    networks:
+      - myNetwork

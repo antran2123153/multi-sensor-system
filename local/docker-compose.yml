@@ -48,7 +48,6 @@ services:
       - SSL_KEYSTORE_PASSWORD=FzOGrwIE
       - SSL_KEY_LOCATION=D:\\kafka\\kafka.truststore.jks
       - SSL_KEY_PASSWORD=FzOGrwIE
-      - GROUP_ID=id1
     depends_on:
       - zookeeper
       - kafka
@@ -60,7 +59,6 @@ services:
     networks:
       - myNetwork
     environment:
-      - OMP_NUM_THREADS=4
       - PRESSURE_TOPIC=pressure
       - TEMPERATURE_TOPIC=temperature
       - BOOTSTRAP_SERVER=kafka:9092
