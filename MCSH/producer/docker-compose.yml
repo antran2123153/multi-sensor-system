@@ -11,7 +11,7 @@ services:
       - OMP_NUM_THREADS=4
       - PRESSURE_TOPIC=pressure
       - TEMPERATURE_TOPIC=temperature
-      - BOOTSTRAP_SERVER=localhost:9093
+      - BOOTSTRAP_SERVER=host.docker.internal:19092
       - SASL_MECHANISM=SCRAM-SHA-256
       - SASL_USERNAME=user_test1
       - SASL_PASSWORD=12345678

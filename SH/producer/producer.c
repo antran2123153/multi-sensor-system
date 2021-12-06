@@ -35,8 +35,6 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // srand((unsigned int)time(NULL));
-
 #pragma omp parallel
     {
         omp_set_num_threads(getenv("OMP_NUM_THREADS"));

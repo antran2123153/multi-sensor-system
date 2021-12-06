@@ -1,5 +1,3 @@
-## MQTT client
-
-## Kafka client
-
-## Docker
+- SH: Single host
+- MHL: Multi host in LAN network
+- MCSH: Multi container in single host
