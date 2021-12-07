@@ -39,12 +39,12 @@ $ docker service create --replicas <NUM-TASK> --name <SERVICE-NAME> <IMAGE>
 $ docker service rm <SERVICE-NAME>
 ```
 
-# Liên kết đính kèm:
+## Liên kết đính kèm:
 - Source code github: https://github.com/antran2123153/Mult...
 - Báo cáo trình bày chi tiết: https://www.overleaf.com/read/dptqdqv...
 - Slide thuyết trình: https://docs.google.com/presentation/...
 
-# Thông tin tham khảo:
+## Thông tin tham khảo:
 - Zookeeper: https://zookeeper.apache.org
 - Apache Kafka: https://kafka.apache.org/documentation
 - Docker: https://docs.docker.com
