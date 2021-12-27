@@ -4,21 +4,19 @@
 
 - Với kiến trúc đa lõi hiện nay của hầu hết các máy tính, ta có thể tập dụng nguồn tài nguyên này để có thể xây dựng hệ thống sinh dữ liệu trên một máy tính duy nhất.
 - Việc triển khai ta xây dựng 3 service trên cùng máy đại diện cho producer, consumer, server. Trong đó:
-
-* Server được triển khai dựa trên sự hỗ trợ của các image được cung cấp sẵn thông qua docker, khi đó ta có thể triển khai một hoặc một cụm các broker cho server nhanh chóng.
-* Chương trình xây dựng cho producer được chạy trên nhiều luồng để có thể xem như có nhiều producer đang chạy cùng lúc.
-* Khi đó với hệ thống hoặc chương trình cần nhận dữ liệu để kiểm thử, sẽ chạy chương trình của consumer và kết nối đến server.
-* Các dịch vụ giao tiếp với nhau thông qua các cổng cảu máy tính. Việc đa luồng phân chia cho các dịch vụ phải được điều chỉnh phù hợp với khả năng của máy tính.
+  - Server được triển khai dựa trên sự hỗ trợ của các image được cung cấp sẵn thông qua docker, khi đó ta có thể triển khai một hoặc một cụm các broker cho server nhanh chóng.
+  - Chương trình xây dựng cho producer được chạy trên nhiều luồng để có thể xem như có nhiều producer đang chạy cùng lúc.
+  - Khi đó với hệ thống hoặc chương trình cần nhận dữ liệu để kiểm thử, sẽ chạy chương trình của consumer và kết nối đến server.
+  - Các dịch vụ giao tiếp với nhau thông qua các cổng cảu máy tính. Việc đa luồng phân chia cho các dịch vụ phải được điều chỉnh phù hợp với khả năng của máy tính.
 
 ## Nhiều máy tính trong cùng một mạng LAN
 
 - Với mô hình một máy trên chỉ có thể đáp ứng được khả năng cung cấp dữ liệu nhỏ. Thực tế lượng dữ liệu thường cho một hệ thống thời gian thực là cực lớn. Vì thế, ta phải tăng sức mạnh bằng phiệc phối hợp nhiều máy tính lại với nhau.\par
 - Trong mô hình này ta cũng cần xây dựng tương tự 3 chương trình cho consumer, producer, server nhưng với quy mô lớn hơn như sau:
-
-* Server: sử dụng một máy tính chuyên biệt để làm server hoặc có thể sử dụng dịch vụ cloud.
-* Producer: được triển khải trên một cụm máy(cluster). Trong đó, có 1 máy nắm quyền điều khiển(manager), thông qua máy này ta có thể nhanh chóng thao tác truyền lệnh đến nhiều máy tính còn lại khác trong mạng(worker). Các máy trong cụm thực hiện chạy chương trình sinh dữ liệu trên nhiều thread.
-* Consumer: triển khai trên một máy riêng để nhận dữ liệu.
-* Các máy tính giao tiếp, truyền - nhận dữ liệu thông qua mạng LAN đã được kết nối sẵn.
+  - Server: sử dụng một máy tính chuyên biệt để làm server hoặc có thể sử dụng dịch vụ cloud.
+  - Producer: được triển khải trên một cụm máy(cluster). Trong đó, có 1 máy nắm quyền điều khiển(manager), thông qua máy này ta có thể nhanh chóng thao tác truyền lệnh đến nhiều máy tính còn lại khác trong mạng(worker). Các máy trong cụm thực hiện chạy chương trình sinh dữ liệu trên nhiều thread.
+  - Consumer: triển khai trên một máy riêng để nhận dữ liệu.
+  - Các máy tính giao tiếp, truyền - nhận dữ liệu thông qua mạng LAN đã được kết nối sẵn.
 
 ## Nhiều máy tính phân tán xa nhau
 
