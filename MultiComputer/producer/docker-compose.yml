@@ -1,0 +1,15 @@
+version: "3.7"
+
+networks:
+  myNetwork:
+    driver: bridge
+
+services:
+  producer-kafka:
+    build: .
+    environment:
+      - OMP_NUM_THREADS=4
+      - TOPIC=temperature
+      - BOOTSTRAP_SERVER=host.docker.internal:19092
+    networks:
+      - myNetwork
