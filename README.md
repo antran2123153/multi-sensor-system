@@ -1,36 +1,35 @@
-<<<<<<< HEAD
+# Multi sensor system
 
-## Triển khai trên một máy tính đơn
+## Deploy on a single computer
 
-- Với kiến trúc đa lõi hiện nay của hầu hết các máy tính, ta có thể tập dụng nguồn tài nguyên này để có thể xây dựng hệ thống sinh dữ liệu trên một máy tính duy nhất.
-- Việc triển khai ta xây dựng 3 service trên cùng máy đại diện cho producer, consumer, server. Trong đó:
-  - Server được triển khai dựa trên sự hỗ trợ của các image được cung cấp sẵn thông qua docker, khi đó ta có thể triển khai một hoặc một cụm các broker cho server nhanh chóng.
-  - Chương trình xây dựng cho producer được chạy trên nhiều luồng để có thể xem như có nhiều producer đang chạy cùng lúc.
-  - Khi đó với hệ thống hoặc chương trình cần nhận dữ liệu để kiểm thử, sẽ chạy chương trình của consumer và kết nối đến server.
-  - Các dịch vụ giao tiếp với nhau thông qua các cổng cảu máy tính. Việc đa luồng phân chia cho các dịch vụ phải được điều chỉnh phù hợp với khả năng của máy tính.
+- With the current multi-core architecture of most computers, we can use this resource to build a data generation system on a single computer.
+- Deployment we build 3 services on the same machine representing producer, consumer, server. In there:
+  - The server is deployed based on the support of images provided through docker, then we can deploy one or a cluster of brokers for the server quickly.
+  The program built for the producer is run on multiple threads so that it can be seen as if there are multiple producers running at the same time.
+  - Then, with the system or program that needs to receive data for testing, it will run the consumer's program and connect to the server.
+  - Services communicate with each other through the ports of the computer. The multithreading division for services must be tailored to the computer's capabilities.
 
-## Nhiều máy tính trong cùng một mạng LAN
+## Multiple computers in the same LAN
 
-- Với mô hình một máy trên chỉ có thể đáp ứng được khả năng cung cấp dữ liệu nhỏ. Thực tế lượng dữ liệu thường cho một hệ thống thời gian thực là cực lớn. Vì thế, ta phải tăng sức mạnh bằng phiệc phối hợp nhiều máy tính lại với nhau.\par
-- Trong mô hình này ta cũng cần xây dựng tương tự 3 chương trình cho consumer, producer, server nhưng với quy mô lớn hơn như sau:
-  - Server: sử dụng một máy tính chuyên biệt để làm server hoặc có thể sử dụng dịch vụ cloud.
-  - Producer: được triển khải trên một cụm máy(cluster). Trong đó, có 1 máy nắm quyền điều khiển(manager), thông qua máy này ta có thể nhanh chóng thao tác truyền lệnh đến nhiều máy tính còn lại khác trong mạng(worker). Các máy trong cụm thực hiện chạy chương trình sinh dữ liệu trên nhiều thread.
-  - Consumer: triển khai trên một máy riêng để nhận dữ liệu.
-  - Các máy tính giao tiếp, truyền - nhận dữ liệu thông qua mạng LAN đã được kết nối sẵn.
+- With the above single-machine model, only the ability to provide small data can be met. In fact, the amount of data typically for a real-time system is enormous. Therefore, we must increase our power by combining many computers together.\par
+- In this model, we also need to build the same 3 programs for consumer, producer, server but with a larger scale as follows:
+  - Server: use a dedicated computer as a server or can use cloud services.
+  - Producer: deployed on a cluster. In which, there is a machine that holds the control (manager), through this machine we can quickly manipulate and transmit commands to many other computers in the network (worker). The machines in the cluster execute the program that generates data on multiple threads.
+  - Consumer: deployed on a separate machine to receive data.
+  - The computers communicate, transmit - receive data through the pre-connected LAN.
 
-## Nhiều máy tính phân tán xa nhau
+## Many computers scattered far apart
 
-- Việc triển khai trên mạng LAN gặp một số bất lợi về yêu cầu các máy phải ở gần nhau và khả năng mở rộng chưa cao. Khắc phục nhược điểm đó ta triển khai mô hình trên mạng diện rộng WAN. Khi đó ta có thể linh hoạt phối hợp nhiều máy ở các nơi xa nhau, đồng thời khả năng mở rộng cũng được tăng cường khi cần thêm máy vào trong hệ thống.\par
-- Với quy mô của mô hình này, ta mở rộng thêm bằng việc triển khai cho server bằng một hệ các máy để tăng khả năng xử lý tránh tắc nghẽn, quá tải. Còn lại việc triển khai cho producer và consumer cũng tương tự như mô hình trên, khác biệt ở phần giao tiếp sẽ thông qua mạng WAN.
-
-## Liên kết đính kèm:
+- The deployment on LAN has some disadvantages in terms of requiring machines to be close to each other and the scalability is not high. To overcome that drawback, we deploy the model on a wide area network (WAN). At that time, we can flexibly coordinate many machines in remote places, and at the same time, the scalability is also enhanced when more machines are needed in the system.\par
+- With the scale of this model, we further expand by deploying the server with a system of machines to increase handling capacity to avoid congestion and overload. The remaining implementations for producers and consumers are similar to the above model, the difference is that the communication will be through the WAN.
+## Attached link:
 
 - Source code github: https://github.com/antran2123153/Mult...
-- Báo cáo trình bày chi tiết: https://www.overleaf.com/read/dptqdqv...
-- Slide thuyết trình: https://docs.google.com/presentation/...
-- Video hướng dẫn chạy: https://youtu.be/aAymK9hcAZU
+- Report: https://www.overleaf.com/read/dptqdqv...
+- Slide: https://docs.google.com/presentation/...
+- Video: https://youtu.be/aAymK9hcAZU
 
-## Thông tin tham khảo:
+## Infomation:
 
 - Zookeeper: https://zookeeper.apache.org
 - Apache Kafka: https://kafka.apache.org/documentation
